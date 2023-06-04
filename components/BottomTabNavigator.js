@@ -19,17 +19,18 @@ export default class BottomTabNavigator extends Component {
               let iconName;
 
               if (route.name === "Alugue uma Bicicleta") {
-               iconName = "bicycle";
+                iconName = "bicycle";
               } else if (route.name === "Histórico de Locações") {
                 iconName = "time";
               }
 
-              // You can return any component that you like here!
+              // Você pode retornar qualquer componente que quiser aqui!
               return (
                 <Ionicons
                   name={iconName}
                   size={size}
                   color={color}
+                  size={size}
                 />
               );
             }

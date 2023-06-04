@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import * as Permissions from "expo-permissions";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import db from "../config";
 
 const bgImage = require("../assets/background2.png");
 const appIcon = require("../assets/appIcon.png");
@@ -32,7 +33,7 @@ export default class RideScreen extends Component {
 
     this.setState({
       /*status === "granted" é verdadeiro se o usuário concedeu permissão
-          status === "granted" é falso se o usuário não concedeu permissão
+          status === "granted" é falso se o usuário não concedeu a permissão
         */
       hasCameraPermissions: status === "granted",
       domState: "scanner",
@@ -46,6 +47,29 @@ export default class RideScreen extends Component {
       domState: "normal",
       scanned: true
     });
+  };
+
+  handleTransaction = () => {
+    var { bikeId } = this.state;
+    db.collection("bicycles")
+      .doc(bikeId)
+      .get()
+      .then(doc => {
+        var bike = doc.data();
+        if (bike.is_bike_available) {
+          this.assignBike();
+        } else {
+          this.initiateBookReturn();
+        }
+      });
+  };
+
+  assignBike = () => {
+    console.log("Você alugou a bicicleta pela próxima 1 hora. Aproveite seu passeio!!");
+  };
+
+  returnBike = () => {
+    console.log("Esperamos que tenha gostado do seu passeio");
   };
 
   render() {
@@ -69,6 +93,7 @@ export default class RideScreen extends Component {
           <View style={styles.textinputContainer}>
             <TextInput
               style={[styles.textinput, { width: "82%" }]}
+              onChangeText={text => this.setState({ userId: text })}
               placeholder={"Id do Usuário"}
               placeholderTextColor={"#FFFFFF"}
               value={userId}
@@ -88,6 +113,12 @@ export default class RideScreen extends Component {
               <Text style={styles.scanbuttonText}>Digitalizar</Text>
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            style={[styles.button, { marginTop: 25 }]}
+            onPress={this.handleTransaction}
+          >
+            <Text style={styles.buttonText}>Desbloquear</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -124,7 +155,8 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
     fontFamily: "Rajdhani_600SemiBold",
-    color: "#4C5D70"
+    color: "#4C5D70",
+    marginBottom: 80
   },
   lowerContainer: {
     flex: 0.5,
