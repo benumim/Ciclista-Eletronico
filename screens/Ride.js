@@ -63,7 +63,7 @@ export default class RideScreen extends Component {
 
     if (!transactionType) {
       this.setState({ bikeId: "" });
-      Alert.alert("Por favor insira/digitalize um ID válido");
+      Alert.alert("Kindly enter/scan valid bike id");
     } else if (transactionType === "under_maintenance") {
       this.setState({
         bikeId: ""
@@ -130,13 +130,11 @@ export default class RideScreen extends Component {
       .get()
       .then(snapshot => {
         snapshot.docs.map(doc => {
-
           this.setState({
             userName: doc.data().name,
             userId: doc.data().id,
             bikeAssigned: doc.data().bike_assigned
           });
-
         });
       });
   };
@@ -155,8 +153,7 @@ export default class RideScreen extends Component {
         if (!doc.data().under_maintenance) {
           // se a bicicleta estiver disponível, o tipo de transação será "rented",
           // caso contrário, será "return"
-
-          transactionType = doc.data().is_bike_available ? "rented" : "return";
+          transactionType = doc.data().is_bike_available ? "Alugado" : "Retornar";
         } else {
           transactionType = "under_maintenance";
           Alert.alert(doc.data().maintenance_message);
