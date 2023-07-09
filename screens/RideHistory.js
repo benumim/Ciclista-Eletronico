@@ -87,7 +87,7 @@ export default class RideHistoryScreen extends Component {
       .join(" ");
     
     var transactionType =
-      item.transaction_type === "rented" ? "alugada" : "retornada";
+      item.transaction_type === "rented" ? "alugada" : "devolvida";
     return (
       <View style={{ borderWidth: 1 }}>
         <ListItem key={i} bottomDivider>
@@ -156,8 +156,6 @@ export default class RideHistoryScreen extends Component {
           </View>
         </View>
         <View style={styles.lowerContainer}>
-
-          { 
           <FlatList
             data={allTransactions}
             renderItem={this.renderItem}
@@ -165,7 +163,6 @@ export default class RideHistoryScreen extends Component {
             onEndReached={() => this.fetchMoreTransactions(searchText)}
             onEndReachedThreshold={0.7}
           />
-          }
         </View>
       </View>
     );
